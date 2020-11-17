@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import Dal from "./dal";
 
 const app = express()
 
@@ -24,12 +25,21 @@ app.post('/victim/:name/:posX/:posY', (req, res) => {
 
 })
 
+/**
+ * @returns the closest citizen from the victim's location
+ * */
 app.get('/getJack', (req, res) => {
-
+    /* Implement the formula returns the dist between A and B*/
 })
 
-app.delete('/evidences', (req, res) => {
-
+app.delete('/evidences', async (req, res) => {
+    const dal = new Dal();
+    try {
+        await dal.resetTableAsync();
+        res.status(200).end();
+    } catch (e) {
+        res.status(400).set({ 'Content-Type': 'application/json' }).json(e)
+    }
 })
 
 export default app

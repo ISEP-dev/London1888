@@ -14,6 +14,17 @@ class Dal {
             throw err
         }
     }
+
+    async resetTableAsync() {
+        const connection = await this.connect()
+        try {
+            await connection.query(`DELETE FROM LondonCitizen`)
+        } catch (err) {
+            throw err
+        } finally {
+            connection.end()
+        }
+    }
 }
 
 export default Dal
