@@ -1,5 +1,5 @@
 import request from "supertest";
-import * as london1888Dependency from "../London1888";
+import * as london1888Dependency from "../london1888";
 import app from "../app";
 import {BASIC_CITIZEN, CLOSEST_CITIZEN, SAME_CLOSEST_CITIZEN, VICTIM} from "../mocks/citizen.mock";
 

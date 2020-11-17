@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import Dal from "./dal";
-import {getLondon1888} from "./London1888";
+import {getLondon1888} from "./london1888";
 
 const app = express()
 

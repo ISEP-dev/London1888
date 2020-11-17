@@ -1,5 +1,5 @@
 import {BASIC_CITIZEN, CLOSEST_CITIZEN, OTHER_BASIC_CITIZEN, SAME_CLOSEST_CITIZEN, VICTIM} from "../mocks/citizen.mock";
-import {getLondon1888} from "../London1888";
+import {getLondon1888} from "../london1888";
 
 describe('London 1888', () => {
     it('Get all closest citizen',() => {
