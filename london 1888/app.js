@@ -24,17 +24,26 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
     const dal = new Dal()
     try {
         const result = await dal.createCitizen(name, posX, posY)
-        console.log(result)
+        res.status(200).set({ 'Content-Type': 'application/json' }).json(result)
+
     } catch (e) {
         console.error(e)
     }
-
-
 })
 
-app.post('/victim/:name/:posX/:posY', (req, res) => {
+app.post('/victim/:name/:posX/:posY', async (req, res) => {
     const {name, posX, posY} = req.params;
+    const dal = new Dal()
 
+    try {
+        const result = await dal.createVictim(name, posX, posY)
+        if (result === null) {
+            return res.status(409).end()
+        }
+        res.status(200).set({ 'Content-Type': 'application/json' }).json(result)
+    } catch (e) {
+        console.error(e)
+    }
 })
 
 app.get('/getJack', async (req, res) => {

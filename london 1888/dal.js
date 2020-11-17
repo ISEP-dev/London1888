@@ -55,11 +55,14 @@ class Dal {
         try {
             const [result] = await connection.query(`
                 INSERT INTO LondonCitizen (name, posX, posY, isVictim) 
-                VALUES (${name}, ${posX}, ${posY}, false)`)
-            console.log(result)
-            return result
-        } catch (err) {
-            console.error(err)
+                VALUES ('${name}', '${posX}', '${posY}', '0')`)
+            return {
+                id: result.insertId,
+                name: name,
+                posX: posX,
+                posY: posY,
+                isVictim: 0
+            }
         } finally {
             connection.end();
         }
@@ -68,13 +71,29 @@ class Dal {
     async createVictim(name, posX, posY) {
         const connection = await this.connect()
         try {
+            const isVictimPresent = await this.hasAlreadyAVictim()
+            if (isVictimPresent) return {}
+
             const [result] = await connection.query(`
-                INSERT INTO LondonCitizen (name, posX, posY, isVictim) 
-                VALUES (${name}, ${posX}, ${posY}, true)`)
-            console.log(result)
-            return result
-        } catch (err) {
-            console.error(err)
+                INSERT INTO LondonCitizen (name, posX, posY, isVictim)
+                VALUES ('${name}', '${posX}', '${posY}', '1')`)
+            return {
+                id: result.insertId,
+                name: name,
+                posX: posX,
+                posY: posY,
+                isVictim: 1
+            }
+        } finally {
+            connection.end();
+        }
+    }
+
+    async hasAlreadyAVictim() {
+        const connection = await this.connect()
+        try {
+            const [victimNumber] = await connection.query(`SELECT COUNT(id) as number from LondonCitizen WHERE isVictim='1'`)
+            return victimNumber[0].number >= 1;
         } finally {
             connection.end();
         }
