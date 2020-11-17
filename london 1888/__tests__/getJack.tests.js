@@ -14,34 +14,37 @@ jest.mock('../dal.js', () => {
     }))
 })
 
-beforeEach(() => {
-    london1888Dependency.getLondon1888 = jest.fn().mockReturnValue({
-        getClosestCitizensFromVictim: mockGetClosestCitizensFromVictim
-    })
-})
-
-
 describe('Get Jack action', () => {
     it("No victim", async () => {
-        mockGetVictimAsync.mockReturnValue(null)
+        mockGetVictimAsync.mockReturnValue(undefined)
+
+        const getClosestCitizensFromVictim = jest.spyOn(
+            london1888Dependency.getLondon1888(),
+            'getClosestCitizensFromVictim'
+        );
 
         const res = await request(app).get(`/getJack`);
 
         expect(res.status).toBe(404)
         expect(mockGetVictimAsync).toHaveBeenCalledTimes(1)
         expect(mockGetAllCitizensAsync).not.toHaveBeenCalled()
-        expect(mockGetClosestCitizensFromVictim).not.toHaveBeenCalled()
+        expect(getClosestCitizensFromVictim).not.toHaveBeenCalled()
     })
 
     it('No citizens', async () => {
         mockGetVictimAsync.mockReturnValue(VICTIM);
         mockGetAllCitizensAsync.mockReturnValue([]);
 
+        const getClosestCitizensFromVictim = jest.spyOn(
+            london1888Dependency.getLondon1888(),
+            'getClosestCitizensFromVictim'
+        );
+
         const res = await request(app).get(`/getJack`);
 
         expect(res.status).toBe(404)
         expect(mockGetAllCitizensAsync).toHaveBeenCalledTimes(1)
-        expect(mockGetClosestCitizensFromVictim).not.toHaveBeenCalled()
+        expect(getClosestCitizensFromVictim).not.toHaveBeenCalled()
     })
 
     it("Conflict with closest citizens", async () => {
@@ -49,10 +52,15 @@ describe('Get Jack action', () => {
         mockGetVictimAsync.mockReturnValue(VICTIM);
         mockGetClosestCitizensFromVictim.mockReturnValue([CLOSEST_CITIZEN, SAME_CLOSEST_CITIZEN]);
 
+        const getClosestCitizensFromVictim = jest.spyOn(
+            london1888Dependency.getLondon1888(),
+            'getClosestCitizensFromVictim'
+        );
+
         const res = await request(app).get(`/getJack`);
 
         expect(res.status).toBe(409)
-        expect(mockGetClosestCitizensFromVictim).toHaveBeenCalledTimes(1)
+        expect(getClosestCitizensFromVictim).toHaveBeenCalledTimes(1)
     })
 
     it("Find the closest citizen of the victim", async () => {
