@@ -27,18 +27,6 @@ class Dal {
         }
     }
 
-    async getClosestCitizenAsync() {
-        const connection = await this.connect()
-        try {
-            const [result] = await connection.query(`SELECT * FROM LondonCitizen WHERE isVictim=0 `)
-            return result
-        } catch (err) {
-            throw err
-        } finally {
-            connection.end()
-        }
-    }
-
     async getVictimAsync() {
         const connection = await this.connect()
         try {
