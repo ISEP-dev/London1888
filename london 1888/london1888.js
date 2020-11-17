@@ -1,7 +1,28 @@
 import MathHelpers from "./math.helpers";
+import Dal from "./dal";
+import NotfoundError from "./errors/notfound.error";
+import ConflictError from "./errors/conflict.error";
 
 class London1888 {
     constructor() {
+    }
+
+    async getVictimAsync() {
+        const dal = new Dal();
+        const victim = await dal.getVictimAsync();
+        if (!victim && victim === undefined) {
+            throw new NotfoundError("Sorry, no victim was found");
+        }
+        return victim;
+    }
+
+    async getAllCitizensAsync() {
+        const dal = new Dal();
+        const citizens = await dal.getAllCitizenAsync();
+        if (!citizens.length) {
+            throw new NotfoundError("Sorry, no citizen was found");
+        }
+        return citizens;
     }
 
     getClosestCitizensFromVictim(victim, citizens) {
@@ -12,9 +33,15 @@ class London1888 {
 
         const minDistanceFoundFromVictim = Math.min(...distanceByCitizens.map(dc => dc.distance));
 
-        return distanceByCitizens
+        const closestCitizens = distanceByCitizens
             .filter(dc => dc.distance === minDistanceFoundFromVictim)
             .map(dc => dc.citizen);
+
+        if (closestCitizens.length > 1) {
+            throw new ConflictError("Sorry but, we found many closest citizen..")
+        }
+
+        return closestCitizens;
     }
 }
 

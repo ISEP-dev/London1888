@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise'
+import UnavaibleError from "./errors/unavaible.error";
 
 class Dal {
     async connect() {
@@ -10,8 +11,7 @@ class Dal {
                 database: 'Db_London1888'
             })
         } catch (err) {
-            console.error('Unable to connect to London1888 database')
-            throw err
+            throw new UnavaibleError();
         }
     }
 
@@ -21,7 +21,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM LondonCitizen WHERE isVictim=0 `)
             return result
         } catch (err) {
-            throw err
+            throw UnavaibleError();
         } finally {
             connection.end()
         }
@@ -33,7 +33,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM LondonCitizen WHERE isVictim=1`)
             return result[0]
         } catch (err) {
-            throw err
+            throw new UnavaibleError()
         } finally {
             connection.end()
         }
@@ -44,7 +44,7 @@ class Dal {
         try {
             await connection.query(`DELETE FROM LondonCitizen`)
         } catch (err) {
-            throw err
+            throw new UnavaibleError();
         } finally {
             connection.end()
         }
