@@ -49,6 +49,36 @@ class Dal {
             connection.end()
         }
     }
+
+    async createCitizen(name, posX, posY) {
+        const connection = await this.connect()
+        try {
+            const [result] = await connection.query(`
+                INSERT INTO LondonCitizen (name, posX, posY, isVictim) 
+                VALUES (${name}, ${posX}, ${posY}, false)`)
+            console.log(result)
+            return result
+        } catch (err) {
+            console.error(err)
+        } finally {
+            connection.end();
+        }
+    }
+
+    async createVictim(name, posX, posY) {
+        const connection = await this.connect()
+        try {
+            const [result] = await connection.query(`
+                INSERT INTO LondonCitizen (name, posX, posY, isVictim) 
+                VALUES (${name}, ${posX}, ${posY}, true)`)
+            console.log(result)
+            return result
+        } catch (err) {
+            console.error(err)
+        } finally {
+            connection.end();
+        }
+    }
 }
 
 export default Dal

@@ -19,8 +19,16 @@ app.use(function (_req, res, next) {
     next()
 })
 
-app.post('/citizen/:name/:posX/:posY', (req, res) => {
+app.post('/citizen/:name/:posX/:posY', async (req, res) => {
     const {name, posX, posY} = req.params;
+    const dal = new Dal()
+    try {
+        const result = await dal.createCitizen(name, posX, posY)
+        console.log(result)
+    } catch (e) {
+        console.error(e)
+    }
+
 
 })
 
