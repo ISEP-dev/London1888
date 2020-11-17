@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import Dal from "./dal";
-import london1888 from "./London1888";
+import {getLondon1888} from "./London1888";
 
 const app = express()
 
@@ -27,14 +27,18 @@ app.post('/victim/:name/:posX/:posY', (req, res) => {
 })
 
 app.get('/getJack', async (req, res) => {
-    const victim = await london1888.getVictimAsync();
-    const citizens = await london1888.getCitizensAsync();
-
-    if (!victim || !citizens.length) {
+    const dal = new Dal();
+    const victim = await dal.getVictimAsync();
+    if (!victim) {
         return res.status(404).end();
     }
 
-    const closestCitizens = london1888.getClosestCitizensFromVictim(victim, citizens);
+    const citizens = await dal.getAllCitizenAsync();
+    if (!citizens.length) {
+        return res.status(404).end();
+    }
+
+    const closestCitizens = getLondon1888().getClosestCitizensFromVictim(victim, citizens);
     if (closestCitizens.length > 1) {
         return res.status(409).end();
     }
@@ -44,7 +48,6 @@ app.get('/getJack', async (req, res) => {
 
 app.delete('/evidences', async (req, res) => {
     const dal = new Dal();
-
     await dal.resetTableAsync();
     res.status(204).end();
 })
