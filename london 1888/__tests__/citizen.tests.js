@@ -6,7 +6,6 @@ const expectedPosX = "5"
 const expectedPosY = "8"
 
 const mockCreateCitizen = jest.fn().mockReturnValue({
-    id: 1,
     name: expectedName,
     posX: expectedPosX,
     posY: expectedPosY,
