@@ -28,8 +28,14 @@ app.post('/victim/:name/:posX/:posY', (req, res) => {
 /**
  * @returns the closest citizen from the victim's location
  * */
-app.get('/getJack', (req, res) => {
+app.get('/getJack', async (req, res) => {
     /* Implement the formula returns the dist between A and B*/
+    const dal = new Dal()
+    try {
+        const victim = await dal.getVictimAsync();
+    } catch (e) {
+
+    }
 })
 
 app.delete('/evidences', async (req, res) => {

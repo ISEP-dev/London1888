@@ -15,6 +15,18 @@ class Dal {
         }
     }
 
+    async getVictimAsync() {
+        const connection = await this.connect()
+        try {
+            const [result] = await connection.query(`SELECT * FROM LondonCitizen WHERE isVictim=1`)
+            return result
+        } catch (err) {
+            throw err
+        } finally {
+            connection.end()
+        }
+    }
+
     async resetTableAsync() {
         const connection = await this.connect()
         try {
