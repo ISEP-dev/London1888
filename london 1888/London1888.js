@@ -1,17 +1,7 @@
-import Dal from "./dal";
 import MathHelpers from "./math.helpers";
 
 class London1888 {
     constructor() {
-        this.dal = new Dal();
-    }
-
-    async getCitizensAsync() {
-        return await this.dal.getVictimAsync();
-    }
-
-    async getVictimAsync() {
-        return await this.dal.getVictimAsync();
     }
 
     getClosestCitizensFromVictim(victim, citizens) {
@@ -29,4 +19,4 @@ class London1888 {
 }
 
 const london1888 = new London1888();
-export default london1888;
+export let getLondon1888 = () => london1888;
