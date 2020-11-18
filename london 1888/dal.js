@@ -71,9 +71,6 @@ class Dal {
     async createVictim(name, posX, posY) {
         const connection = await this.connect()
         try {
-            const isVictimPresent = await this.hasAlreadyAVictim()
-            if (isVictimPresent) return {}
-
             const [result] = await connection.query(`
                 INSERT INTO LondonCitizen (name, posX, posY, isVictim)
                 VALUES ('${name}', '${posX}', '${posY}', '1')`)

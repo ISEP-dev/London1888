@@ -36,10 +36,11 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
     const dal = new Dal()
 
     try {
-        const result = await dal.createVictim(name, posX, posY)
-        if (result === null) {
+        const hasVictim = await dal.hasAlreadyAVictim()
+        if (hasVictim === true) {
             return res.status(409).end()
         }
+        const result = await dal.createVictim(name, posX, posY)
         res.status(200).set({ 'Content-Type': 'application/json' }).json(result)
     } catch (e) {
         console.error(e)
