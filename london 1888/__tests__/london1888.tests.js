@@ -14,7 +14,7 @@ jest.mock('../dal.js', () => {
 })
 
 describe('London 1888', () => {
-    it('Get all citizen : Done',async () => {
+    it('Get all citizen : Done', async () => {
         try {
             const expectedResponse = [BASIC_CITIZEN, OTHER_BASIC_CITIZEN];
             mockGetAllCitizensAsync.mockReturnValue(expectedResponse);
@@ -24,7 +24,7 @@ describe('London 1888', () => {
             expect(true).toBeFalsy();
         }
     });
-    it('Get all citizen : Throw not found',async () => {
+    it('Get all citizen : Throw not found', async () => {
         try {
             const expectedResponse = [];
             mockGetAllCitizensAsync.mockReturnValue(expectedResponse);
@@ -34,7 +34,7 @@ describe('London 1888', () => {
         }
     });
 
-    it('Get victim : Done',async () => {
+    it('Get victim : Done', async () => {
         try {
             const expectedResponse = VICTIM;
             mockGetVictimAsync.mockReturnValue(expectedResponse);
@@ -44,7 +44,7 @@ describe('London 1888', () => {
             expect(true).toBeFalsy();
         }
     });
-    it('Get victim : Throw not found',async () => {
+    it('Get victim : Throw not found', async () => {
         try {
             const expectedResponse = undefined;
             mockGetVictimAsync.mockReturnValue(expectedResponse);
@@ -54,7 +54,7 @@ describe('London 1888', () => {
         }
     });
 
-    it('Get closest citizen : done',() => {
+    it('Get closest citizen : done', () => {
         try {
             const citizens = [CLOSEST_CITIZEN, BASIC_CITIZEN, OTHER_BASIC_CITIZEN];
             const res = getLondon1888().getClosestCitizensFromVictim(VICTIM, citizens)[0];
@@ -63,7 +63,7 @@ describe('London 1888', () => {
             expect(true).toBeFalsy();
         }
     });
-    it('Get closest citizen : Throw conflict',() => {
+    it('Get closest citizen : Throw conflict', () => {
         try {
             const citizens = [CLOSEST_CITIZEN, SAME_CLOSEST_CITIZEN, BASIC_CITIZEN, OTHER_BASIC_CITIZEN]
             getLondon1888().getClosestCitizensFromVictim(VICTIM, citizens)
