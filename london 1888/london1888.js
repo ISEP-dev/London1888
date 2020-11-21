@@ -39,7 +39,7 @@ class London1888 {
             .map(dc => dc.citizen);
 
         if (closestCitizens.length > 1) {
-            throw new ConflictError("Sorry but, we found many closest citizen..")
+            throw new ConflictError("Sorry but, we found many closest citizens...")
         }
 
         return closestCitizens;
@@ -50,7 +50,7 @@ class London1888 {
 
         const numberOfVictim = await dal.numberOfVictimAsync()
         if (numberOfVictim >= 1)
-            throw new ConflictError()
+            throw new ConflictError("There is already a victim, wait to be a victim...")
     }
 
     async createCitizenAsync(name, posX, posY) {
