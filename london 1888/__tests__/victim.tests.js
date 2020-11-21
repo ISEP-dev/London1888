@@ -1,10 +1,6 @@
 import request from "supertest";
 import app from "../app";
-
-const expectedName = "Lucas"
-const expectedPosX = "9"
-const expectedPosY = "8"
-
+import {VICTIM} from "../mocks/citizen.mock";
 
 let mockCreateVictim;
 let mockHasAlreadyAVictim;
@@ -13,42 +9,37 @@ let mockHasAlreadyAVictim;
 jest.mock("../dal.js", () => {
     return jest.fn().mockImplementation(() => ({
         createVictimAsync: mockCreateVictim,
-        hasAlreadyAVictimAsync: mockHasAlreadyAVictim
+        numberOfVictimAsync: mockHasAlreadyAVictim
     }))
 })
 
 describe("Victim tests", () => {
     it("Create a victim", async () => {
-        mockHasAlreadyAVictim = jest.fn().mockReturnValue(false)
-        mockCreateVictim = jest.fn().mockReturnValue({
-            name: expectedName,
-            posX: expectedPosX,
-            posY: expectedPosY,
-            isVictim: "1"
-        })
+        mockHasAlreadyAVictim = jest.fn().mockReturnValue(0)
+        mockCreateVictim = jest.fn().mockReturnValue(VICTIM)
 
-        const res = await request(app).post(`/victim/${expectedName}/${expectedPosX}/${expectedPosY}`)
+        const res = await request(app).post(`/victim/${VICTIM.name}/${VICTIM.posX}/${VICTIM.posY}`)
 
         expect(res.status).toBe(200)
-        expect(res.body.name).toBe(expectedName)
-        expect(res.body.posX).toBe(expectedPosX)
-        expect(res.body.posY).toBe(expectedPosY)
+        expect(res.body.name).toBe(VICTIM.name)
+        expect(res.body.posX).toBe(VICTIM.posX.toString())
+        expect(res.body.posY).toBe(VICTIM.posY.toString())
         expect(mockHasAlreadyAVictim).toBeCalledTimes(1)
         expect(mockCreateVictim).toBeCalledTimes(1)
-        expect(mockCreateVictim).toBeCalledWith(expectedName, expectedPosX, expectedPosY)
+        expect(mockCreateVictim).toBeCalledWith(VICTIM.name, VICTIM.posX.toString(), VICTIM.posY.toString())
 
     })
 
     it("Cannot create a victim", async () => {
-        mockHasAlreadyAVictim = jest.fn().mockReturnValue(true)
+        mockHasAlreadyAVictim = jest.fn().mockReturnValue(1)
         mockCreateVictim = jest.fn()
 
-        const res = await request(app).post(`/victim/${expectedName}/${expectedPosX}/${expectedPosY}`)
+        const res = await request(app).post(`/victim/${VICTIM.name}/${VICTIM.posX}/${VICTIM.posY}`)
 
 
         expect(res.status).toBe(409)
         expect(mockHasAlreadyAVictim).toBeCalledTimes(1)
-        expect(mockHasAlreadyAVictim).toReturnWith(true)
+        expect(mockHasAlreadyAVictim).toReturnWith(1)
         expect(mockCreateVictim).not.toHaveBeenCalled()
     })
 })
