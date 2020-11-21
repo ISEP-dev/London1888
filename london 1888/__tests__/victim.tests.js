@@ -12,8 +12,8 @@ let mockHasAlreadyAVictim;
 
 jest.mock("../dal.js", () => {
     return jest.fn().mockImplementation(() => ({
-        createVictim: mockCreateVictim,
-        hasAlreadyAVictim: mockHasAlreadyAVictim
+        createVictimAsync: mockCreateVictim,
+        hasAlreadyAVictimAsync: mockHasAlreadyAVictim
     }))
 })
 

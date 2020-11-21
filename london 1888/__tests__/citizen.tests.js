@@ -14,7 +14,7 @@ const mockCreateCitizen = jest.fn().mockReturnValue({
 
 jest.mock("../dal.js", () => {
     return jest.fn().mockImplementation(() => ({
-        createCitizen: mockCreateCitizen
+        createCitizenAsync: mockCreateCitizen
     }))
 })
 
