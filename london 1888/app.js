@@ -2,7 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import Dal from "./dal";
 import {getLondon1888} from "./london1888";
-import UnavaibleError from "./errors/unavaible.error";
+import UnavailableError from "./errors/unavailableError";
 import NotfoundError from "./errors/notfound.error";
 import ConflictError from "./errors/conflict.error";
 
@@ -54,7 +54,7 @@ app.get('/getJack', async (req, res) => {
         const closestCitizens = getLondon1888().getClosestCitizensFromVictim(victim, citizens);
         return res.status(200).set({ 'Content-Type': 'application/json' }).json(closestCitizens[0]);
     } catch (err) {
-        if (err instanceof UnavaibleError) {
+        if (err instanceof UnavailableError) {
             return res.status(err.status).send(err.message).end();
         } else if (err instanceof NotfoundError) {
             return res.status(err.status).send(err.message).end();
@@ -70,7 +70,7 @@ app.delete('/evidences', async (req, res) => {
         await dal.resetTableAsync();
         res.status(204).end();
     } catch (err) {
-        if (err instanceof UnavaibleError)
+        if (err instanceof UnavailableError)
             return res.status(err.status).send(err.message).end();
     }
 })

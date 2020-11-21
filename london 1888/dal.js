@@ -1,5 +1,5 @@
 import mysql from 'mysql2/promise'
-import UnavaibleError from "./errors/unavaible.error";
+import UnavailableError from "./errors/unavailableError";
 
 class Dal {
     async connect() {
@@ -11,7 +11,7 @@ class Dal {
                 database: 'Db_London1888'
             })
         } catch (err) {
-            throw new UnavaibleError();
+            throw new UnavailableError();
         }
     }
 
@@ -21,7 +21,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM LondonCitizen WHERE isVictim=0 `)
             return result
         } catch (err) {
-            throw UnavaibleError();
+            throw new UnavailableError();
         } finally {
             connection.end()
         }
@@ -33,7 +33,7 @@ class Dal {
             const [result] = await connection.query(`SELECT * FROM LondonCitizen WHERE isVictim=1`)
             return result[0]
         } catch (err) {
-            throw new UnavaibleError()
+            throw new UnavailableError()
         } finally {
             connection.end()
         }
@@ -44,7 +44,7 @@ class Dal {
         try {
             await connection.query(`DELETE FROM LondonCitizen`)
         } catch (err) {
-            throw new UnavaibleError();
+            throw new UnavailableError();
         } finally {
             connection.end()
         }
@@ -63,6 +63,8 @@ class Dal {
                 posY: posY,
                 isVictim: 0
             }
+        } catch (e) {
+            throw new UnavailableError()
         } finally {
             connection.end();
         }
@@ -81,6 +83,8 @@ class Dal {
                 posY: posY,
                 isVictim: 1
             }
+        } catch (e) {
+            throw new UnavailableError();
         } finally {
             connection.end();
         }
@@ -91,6 +95,8 @@ class Dal {
         try {
             const [victimNumber] = await connection.query(`SELECT COUNT(id) as number from LondonCitizen WHERE isVictim='1'`)
             return victimNumber[0].number >= 1;
+        } catch (e) {
+            throw new UnavailableError();
         } finally {
             connection.end();
         }
