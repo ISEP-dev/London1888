@@ -49,6 +49,52 @@ class Dal {
             connection.end()
         }
     }
+
+    async createCitizenAsync(name, posX, posY) {
+        const connection = await this.connect()
+        try {
+            const [result] = await connection.query(`
+                INSERT INTO LondonCitizen (name, posX, posY, isVictim) 
+                VALUES ('${name}', '${posX}', '${posY}', '0')`)
+            return {
+                id: result.insertId,
+                name: name,
+                posX: posX,
+                posY: posY,
+                isVictim: 0
+            }
+        } finally {
+            connection.end();
+        }
+    }
+
+    async createVictimAsync(name, posX, posY) {
+        const connection = await this.connect()
+        try {
+            const [result] = await connection.query(`
+                INSERT INTO LondonCitizen (name, posX, posY, isVictim)
+                VALUES ('${name}', '${posX}', '${posY}', '1')`)
+            return {
+                id: result.insertId,
+                name: name,
+                posX: posX,
+                posY: posY,
+                isVictim: 1
+            }
+        } finally {
+            connection.end();
+        }
+    }
+
+    async hasAlreadyAVictimAsync() {
+        const connection = await this.connect()
+        try {
+            const [victimNumber] = await connection.query(`SELECT COUNT(id) as number from LondonCitizen WHERE isVictim='1'`)
+            return victimNumber[0].number >= 1;
+        } finally {
+            connection.end();
+        }
+    }
 }
 
 export default Dal

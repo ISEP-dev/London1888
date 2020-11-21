@@ -19,14 +19,32 @@ app.use(function (_req, res, next) {
     next()
 })
 
-app.post('/citizen/:name/:posX/:posY', (req, res) => {
+app.post('/citizen/:name/:posX/:posY', async (req, res) => {
     const {name, posX, posY} = req.params;
+    const dal = new Dal()
+    try {
+        const result = await dal.createCitizenAsync(name, posX, posY)
+        res.status(200).set({ 'Content-Type': 'application/json' }).json(result)
 
+    } catch (e) {
+        console.error(e)
+    }
 })
 
-app.post('/victim/:name/:posX/:posY', (req, res) => {
+app.post('/victim/:name/:posX/:posY', async (req, res) => {
     const {name, posX, posY} = req.params;
+    const dal = new Dal()
 
+    try {
+        const hasVictim = await dal.hasAlreadyAVictimAsync()
+        if (hasVictim === true) {
+            return res.status(409).end()
+        }
+        const result = await dal.createVictimAsync(name, posX, posY)
+        res.status(200).set({ 'Content-Type': 'application/json' }).json(result)
+    } catch (e) {
+        console.error(e)
+    }
 })
 
 app.get('/getJack', async (req, res) => {
