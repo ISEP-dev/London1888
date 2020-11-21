@@ -57,14 +57,14 @@ class London1888 {
         const dal = new Dal()
 
         const lastInsertId = await dal.createCitizenAsync(name, posX, posY)
-        return new Citizen(lastInsertId, name, posX, posY, 0)
+        return new Citizen(lastInsertId, name, posX, posY, false)
     }
 
     async createVictimAsync(name, posX, posY) {
         const dal = new Dal()
 
         const lastInsertId = await dal.createVictimAsync(name, posX, posY)
-        return new Citizen(lastInsertId, name, posX, posY, 1)
+        return new Citizen(lastInsertId, name, posX, posY, true)
     }
 }
 
