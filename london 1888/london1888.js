@@ -2,6 +2,7 @@ import MathHelpers from "./math.helpers";
 import Dal from "./dal";
 import NotfoundError from "./errors/notfound.error";
 import ConflictError from "./errors/conflict.error";
+import Citizen from "./citizen";
 
 class London1888 {
     constructor() {
@@ -42,6 +43,28 @@ class London1888 {
         }
 
         return closestCitizens;
+    }
+
+    async checkIfHasAlreadyAVictimAsync() {
+        const dal = new Dal()
+
+        const numberOfVictim = await dal.numberOfVictimAsync()
+        if (numberOfVictim >= 1)
+            throw new ConflictError()
+    }
+
+    async createCitizenAsync(name, posX, posY) {
+        const dal = new Dal()
+
+        const lastInsertId = await dal.createCitizenAsync(name, posX, posY)
+        return new Citizen(lastInsertId, name, posX, posY, 0)
+    }
+
+    async createVictimAsync(name, posX, posY) {
+        const dal = new Dal()
+
+        const lastInsertId = await dal.createVictimAsync(name, posX, posY)
+        return new Citizen(lastInsertId, name, posX, posY, 1)
     }
 }
 

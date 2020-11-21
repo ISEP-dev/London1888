@@ -56,13 +56,7 @@ class Dal {
             const [result] = await connection.query(`
                 INSERT INTO LondonCitizen (name, posX, posY, isVictim) 
                 VALUES ('${name}', '${posX}', '${posY}', '0')`)
-            return {
-                id: result.insertId,
-                name: name,
-                posX: posX,
-                posY: posY,
-                isVictim: 0
-            }
+            return result.insertId
         } catch (e) {
             throw new UnavailableError()
         } finally {
@@ -76,13 +70,7 @@ class Dal {
             const [result] = await connection.query(`
                 INSERT INTO LondonCitizen (name, posX, posY, isVictim)
                 VALUES ('${name}', '${posX}', '${posY}', '1')`)
-            return {
-                id: result.insertId,
-                name: name,
-                posX: posX,
-                posY: posY,
-                isVictim: 1
-            }
+            return result.insertId
         } catch (e) {
             throw new UnavailableError();
         } finally {
@@ -90,11 +78,11 @@ class Dal {
         }
     }
 
-    async hasAlreadyAVictimAsync() {
+    async numberOfVictimAsync() {
         const connection = await this.connect()
         try {
             const [victimNumber] = await connection.query(`SELECT COUNT(id) as number from LondonCitizen WHERE isVictim='1'`)
-            return victimNumber[0].number >= 1;
+            return victimNumber[0].number;
         } catch (e) {
             throw new UnavailableError();
         } finally {
