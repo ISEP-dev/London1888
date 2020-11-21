@@ -50,7 +50,7 @@ class Dal {
         }
     }
 
-    async createCitizen(name, posX, posY) {
+    async createCitizenAsync(name, posX, posY) {
         const connection = await this.connect()
         try {
             const [result] = await connection.query(`
@@ -68,7 +68,7 @@ class Dal {
         }
     }
 
-    async createVictim(name, posX, posY) {
+    async createVictimAsync(name, posX, posY) {
         const connection = await this.connect()
         try {
             const [result] = await connection.query(`
@@ -86,7 +86,7 @@ class Dal {
         }
     }
 
-    async hasAlreadyAVictim() {
+    async hasAlreadyAVictimAsync() {
         const connection = await this.connect()
         try {
             const [victimNumber] = await connection.query(`SELECT COUNT(id) as number from LondonCitizen WHERE isVictim='1'`)
